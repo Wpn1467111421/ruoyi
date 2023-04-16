@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysLogZMapper">
+    <resultMap id="SysLogZResult" type="SysZ">
+        <id     property="id"      column="id"      />
+        <result property="logName"    column="daima"    />
+        <result     property="publisher"      column="publisher"      />
+        <result property="singleSearch"    column="singleSearch"    />
+        <result     property="crossSearch"      column="crossSearch"      />
+        <result property="browse"    column="browse"    />
+        <result     property="download"      column="download"      />
+        <result property="foreignBrowseDownload"    column="foreignBrowseDownload"    />
+        <result     property="doiBrowseDownload"      column="doiBrowseDownload"      />
+        <result property="month"    column="month"    />
+    </resultMap>
+
+    <sql id="selectLogZVo">
+        select id,daima,publisher,singleSearch,crossSearch,browse,download,foreignBrowseDownload,doiBrowseDownload,month from rizhi
+    </sql>
+
+    <select id="selectLogZList" parameterType="SysZ" resultMap="SysLogZResult">
+        <include refid="selectLogZVo"/>
+        <where>
+            <if test="logName != null and logName != ''">
+                AND daima like concat('%', #{logName}, '%')
+            </if>
+            <if test="codes != null and codes != ''">
+                AND daima in
+                <foreach collection="codes" index="index" item="code" separator="," close=")" open="(">
+                    #{code}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+</mapper>
